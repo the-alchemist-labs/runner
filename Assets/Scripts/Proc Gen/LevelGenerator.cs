@@ -8,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] Transform chunkParent;
     [SerializeField] float chunkLength = 10f;
     [SerializeField] float moveSpeed = 8f;
+    [SerializeField] float minMoveSpeed = 2f;
 
     List<GameObject> chunks = new List<GameObject>();
 
@@ -16,9 +17,20 @@ public class LevelGenerator : MonoBehaviour
         SpawnStartingChunks();
     }
 
-    void Update() 
+    void Update()
     {
         MoveChunks();
+    }
+
+    public void UpdateChunkMoveSpeed(float speedModifier)
+    {
+        moveSpeed += speedModifier;
+        if (moveSpeed < minMoveSpeed)
+        {
+            moveSpeed = minMoveSpeed;
+        }
+
+        Physics.gravity = new Vector3(Physics.gravity.x, Physics.gravity.y, Physics.gravity.z - speedModifier);
     }
 
     void SpawnStartingChunks()
@@ -55,7 +67,7 @@ public class LevelGenerator : MonoBehaviour
         return spawnPositionZ;
     }
 
-    void MoveChunks() 
+    void MoveChunks()
     {
         for (int i = 0; i < chunks.Count; i++)
         {

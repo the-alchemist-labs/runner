@@ -1,13 +1,23 @@
 using System;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public abstract class Pickup : MonoBehaviour
 {
+    [SerializeField] private float rotationSpeed = 100f;
+
+    void Update()
+    {
+       transform.Rotate(0, rotationSpeed * Time.deltaTime, 0f);
+    }
+
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerCollisionHandler>() != null)
         {
-            Debug.Log(other.gameObject.name);
+            OnPickup();
         }
     }
+
+    protected abstract void OnPickup();
 }
